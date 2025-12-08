@@ -42,7 +42,7 @@ def get_function_name(question: str, lang: str):
     func_lines = [x for x in question.strip().split('\n') if x.strip()]
 
     if lang.lower() == 'python':
-        func_idx = [i for i in range(len(func_lines)) if func_lines[i].startswith("def ")][-1]
+        func_idx = [i for i in range(len(func_lines)) if func_lines[i].strip().startswith("def ")][-1]
         func_name = func_lines[func_idx].split('(')[0].strip()
         func_prefix = "\n".join(func_lines[:func_idx])
         return func_name, func_prefix
@@ -60,7 +60,7 @@ def extract_generation_code(example: str, lang_code: str, verbose: bool=False):
     indent = setting['indent']
 
     try:
-        code_block: str = re.findall(f'```{lang.lower()}\n(.*?)```', output, re.DOTALL | re.IGNORECASE)[0]
+        code_block: str = re.findall(f'```{lang.lower()}[ \\t]*\n(.*?)```', output, re.DOTALL | re.IGNORECASE)[0]
         if verbose:
             print(">>> Task: {}\n{}".format(task_id, code_block))
         
